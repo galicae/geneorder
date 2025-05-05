@@ -1,9 +1,0 @@
-project:
-  output-dir: _docs
-
-website:
-  title: "goppy"
-  site-url: "https://galicae.github.io/goppy"
-  description: "the Python Gene Order Plotter"
-  repo-branch: main
-  repo-url: "https://github.com/galicae/goppy"
