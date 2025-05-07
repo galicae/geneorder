@@ -11,6 +11,7 @@ d = { 'settings': { 'branch': 'main',
                             'goppy.util.estimate_plot_size': ('util.html#estimate_plot_size', 'goppy/util.py'),
                             'goppy.util.filter': ('util.html#filter', 'goppy/util.py'),
                             'goppy.util.gff_attribute_selector': ('util.html#gff_attribute_selector', 'goppy/util.py'),
+                            'goppy.util.insert_gap': ('util.html#insert_gap', 'goppy/util.py'),
                             'goppy.util.read_aln': ('util.html#read_aln', 'goppy/util.py'),
                             'goppy.util.read_gff': ('util.html#read_gff', 'goppy/util.py'),
                             'goppy.util.syntenic_block_borders': ('util.html#syntenic_block_borders', 'goppy/util.py')}}}

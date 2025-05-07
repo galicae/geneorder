@@ -19,21 +19,21 @@ from . import util
 
 # %% ../nbs/00_core.ipynb 8
 def plot_synteny(
-    gff,
-    block_start: int = None,
-    block_end: int = None,
-    figsize: (float, float) = None,
-    locus_start: str = "start",  # the GFF column with the start position of the gene ("start").
-    locus_end: str = "end",  # the GFF column with the end position of the gene ("end").
-    molecule: str = "seqid",
-    locus_name: str = "gene_name",
-    fig_title: str = None,
-    save: str | Path = "synteny.svg",
-    chromosome_color: str = "lightgray",
-    backup_gene_color: str = "darkgray",
-    gene_name_offset: float = 0.02,
-    chromosome_width: float = 1,
-    gene_width: float = 5,
+    gff,  # a GFF in Pandas dataframe form. Only includes the genes of the syntenic block in question.
+    block_start: int = None,  # The start coordinate of the syntenic locus to plot. If None, will be set to the start of the first gene minus 5% of the block length.
+    block_end: int = None,  # The end coordinate of the syntenic locus to plot. If None, will be set to the end of the last gene plus 5% of the block length.
+    figsize: (float, float) = None,  # the figure size.
+    locus_start: str = "start",  # the GFF column that describes the start coordinate of the entities (e.g. gene, mRNA) to be plotted on the chromosome. In a well-behaved GFF, this should be "start".
+    locus_end: str = "end",  # the GFF column that describes the end coordinate of the entities (e.g. gene, mRNA) to be plotted on the chromosome. In a well-behaved GFF, this should be "end".
+    molecule: str = "seqid",  # the GFF column that holds the molecule name (chromosome/scaffold/contig ID). In a well-behaved GFF, this should be "seqid".
+    locus_name: str = "gene_name",  # the GFF column that holds the gene/mRNA symbol. This is usually a tag in the "attributes" column of a well-behaved GFF and should have been extracted prior to this step. It will be plotted according to the `gene_name_offset` parameter.
+    fig_title: str = None,  # Figure title.
+    save: str | Path = "synteny.svg",  # path to save an SVG image.
+    chromosome_color: str = "lightgray",  # the color of the line representing the molecule the genes are plotted on.
+    backup_gene_color: str = "darkgray",  # If the GFF has no column titled "color", the gene arrows will be filled using this color.
+    gene_name_offset: float = 0.02,  # Default offset for plotting gene names if the GFF has no column titled "offset".
+    chromosome_width: float = 1,  # Linewidth parameter for the line representing the chromosome.
+    gene_width: float = 5,  # Width of the arrow patches representing genes. Please refer to the documentation of `matplotlib.pyplot.arrow` for more details.
 ) -> None:
     "Function to plot a syntenic cluster of genes."
 
@@ -106,25 +106,29 @@ def plot_synteny(
 
 # %% ../nbs/00_core.ipynb 14
 def plot_synteny_schematic(
-    gff: pd.DataFrame,  #
-    figsize: (float, float) = None,  #
-    block_gene: float = 400,  #
-    block_dist: float = 200,  #
-    locus_start: str = "start",  #
-    locus_end: str = "end",  #
-    molecule: str = "seqid",  #
-    locus_name: str = "gene_name",  #
-    save: str | Path = "schematic.svg",  #
-    chromosome_color: str = "black",  #
-    backup_gene_color: str = "darkgray",  #
-    gene_name_offset: float = 0.02,  #
-    chromosome_width: float = 3,  #
-    head_length: float = 200,  #
-    head_width: float = 1.7,  #
-    gene_width: float = 1,  #
-    return_fig: bool = False,  # whether to return
+    gff: pd.DataFrame,  # a GFF in Pandas dataframe form. Only includes the genes of the syntenic block in question.
+    block_gene: float = 400,  # length of a gene arrow, in plot coordinate space.
+    block_dist: float = 200,  # length of gap between successive genes, in plot coordinate space.
+    locus_start: str = "start",  # the GFF column that describes the start coordinate of the entities (e.g. gene, mRNA) to be plotted on the chromosome. In a well-behaved GFF, this should be "start".
+    locus_end: str = "end",  # the GFF column that describes the end coordinate of the entities (e.g. gene, mRNA) to be plotted on the chromosome. In a well-behaved GFF, this should be "end".
+    molecule: str = "seqid",  # the GFF column that holds the molecule name (chromosome/scaffold/contig ID). In a well-behaved GFF, this should be "seqid".
+    locus_name: str = "gene_name",  # the GFF column that holds the gene/mRNA symbol. This is usually a tag in the "attributes" column of a well-behaved GFF and should have been extracted prior to this step. It will be plotted according to the `gene_name_offset` parameter.
+    chromosome_color: str = "black",  # the color of the line representing the molecule the genes are plotted on.
+    backup_gene_color: str = "darkgray",  # If the GFF has no column titled "color", the gene arrows will be filled using this color.
+    gene_name_offset: float = 0.02,  # Default offset for plotting gene names if the GFF has no column titled "offset".
+    chromosome_width: float = 3,  # Linewidth parameter for the line representing the chromosome; also, patch linewidth of the arrows representing genes. Please refer to the documentation of `matplotlib.patches.FancyArrowPath` for more details.
+    head_length: float = 200,  # Head length for the arrows representing genes. Please refer to the documentation of `matplotlib.patches.FancyArrowPath` for more details.
+    head_width: float = 1.7,  # Head width for the arrows representing genes. Please refer to the documentation of `matplotlib.patches.FancyArrowPath` for more details.
+    gene_width: float = 1,  # Width of the arrow patches representing genes. Please refer to the documentation of `matplotlib.patches.FancyArrowPath` for more details.
+    ax: plt.Axes = None,  # a pre-existing matplotlib axes object, if you wish to include this plot in a composite.
+    figsize: (
+        float,
+        float,
+    ) = None,  # the figure size. Will be ignored if ax is not None.
+    save: str | Path = "schematic.svg",  # path to save an SVG image.
+    return_fig: bool = False,  # whether to return an axes object. Useful for further manipulation of the plot.
 ) -> plt.Figure | plt.Axes | None:
-    # 'Function to plot a syntenic cluster of genes.'
+    # 'Function to plot a syntenic cluster of genes. Each gene is represented by an arrow; left-facing arrows indicate a minus orientation, and right-facing arrows a plus orientation. The genes can be colored using named colors from the `matplotlib.colors.CSS4_COLORS` collection.'
 
     if len(gff[molecule].unique()) > 1:
         raise ValueError(
@@ -153,6 +157,8 @@ def plot_synteny_schematic(
         start = end + block_dist
         end = start + block_gene
         if "color" in gene.index:
+            if gene["color"] == "":
+                continue
             color = mcolors.CSS4_COLORS[gene["color"]]
         else:
             color = backup_gene_color
