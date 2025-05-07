@@ -2,8 +2,8 @@ project:
   output-dir: _docs
 
 website:
-  title: "goppy"
-  site-url: "https://galicae.github.io/goppy"
+  title: "geneorder"
+  site-url: "https://galicae.github.io/geneorder"
   description: "the Python Gene Order Plotter"
   repo-branch: main
-  repo-url: "https://github.com/galicae/goppy"
+  repo-url: "https://github.com/galicae/geneorder"
