@@ -2,6 +2,14 @@
 
 <!-- do not remove -->
 
+## 0.0.2
+
+No changes to the core functionality. While trying to upload on PyPi, I found out that the initial
+name I came up with was already taken (`goppy` stands for [Gaussian Online Processes for
+Python](https://pypi.org/project/goppy/)). This prompted a renaming of the repository and the
+corresponding re-factoring of the code. I took the opportunity to revamp the index.ipynb notebook.
+
+
 ## 0.0.1
 
 Initial release. Contains basic functionality:
