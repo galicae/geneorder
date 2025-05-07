@@ -27,12 +27,6 @@ Install latest from the GitHub
 $ pip install git+https://github.com/galicae/geneorder.git
 ```
 
-or from [conda](https://anaconda.org/galicae/geneorder)
-
-``` sh
-$ conda install -c galicae geneorder
-```
-
 or from [pypi](https://pypi.org/project/geneorder/)
 
 ``` sh
@@ -45,16 +39,116 @@ Documentation can be found hosted on this GitHub
 [repository](https://github.com/galicae/geneorder)’s
 [pages](https://galicae.github.io/geneorder/). Additionally you can find
 package manager specific guidelines on
-[conda](https://anaconda.org/galicae/geneorder) and
-[pypi](https://pypi.org/project/geneorder/) respectively.
+[pypi](https://pypi.org/project/geneorder/).
 
 ## How to use
 
-The most basic `geneorder` use case is when you have a list of genes that
-are co-linear and would like to plot them in their chromosomal context.
+The most basic `geneorder` use case is when you have a list of genes
+that are co-linear and would like to plot them in their chromosomal
+context. The least information that is needed for that is
+
+- the chromosome name
+- the gene IDs/names
+- the starts/ends of all genes
+- the strand and orientation of the genes
 
 ``` python
-1 + 1
+import pandas as pd
+from geneorder.core import plot_synteny_schematic
 ```
 
-    2
+``` python
+gene_dict = {
+    'gene_name': ['Hox1', 'Hox2', 'Hox3', 'Hox4', 'Hox5', 'Hox6', 'Hox7', 'Hox8', 'Hox10'],
+    'gene_id': ['PB.8615', 'g9718', 'PB.8616', 'g9720', 'g9721', 'PB.8617', 'g9723', 'g9724', 'g9725'],
+    'start': [1927066, 1998922, 2058396, 2195412, 2351936, 2373415, 2565196, 2916314, 2986021],
+    'end': [1936157, 2024148, 2065953, 2206712, 2354374, 2375678, 2594468, 2926445, 2996225],
+}
+
+minimal = pd.DataFrame(gene_dict)
+minimal['seqid'] = 'pseudochrom_56'
+minimal['strand'] = '-'
+```
+
+``` python
+minimal
+```
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+&#10;    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+&#10;    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+|     | gene_name | gene_id | start   | end     | seqid          | strand |
+|-----|-----------|---------|---------|---------|----------------|--------|
+| 0   | Hox1      | PB.8615 | 1927066 | 1936157 | pseudochrom_56 | \-     |
+| 1   | Hox2      | g9718   | 1998922 | 2024148 | pseudochrom_56 | \-     |
+| 2   | Hox3      | PB.8616 | 2058396 | 2065953 | pseudochrom_56 | \-     |
+| 3   | Hox4      | g9720   | 2195412 | 2206712 | pseudochrom_56 | \-     |
+| 4   | Hox5      | g9721   | 2351936 | 2354374 | pseudochrom_56 | \-     |
+| 5   | Hox6      | PB.8617 | 2373415 | 2375678 | pseudochrom_56 | \-     |
+| 6   | Hox7      | g9723   | 2565196 | 2594468 | pseudochrom_56 | \-     |
+| 7   | Hox8      | g9724   | 2916314 | 2926445 | pseudochrom_56 | \-     |
+| 8   | Hox10     | g9725   | 2986021 | 2996225 | pseudochrom_56 | \-     |
+
+</div>
+
+``` python
+plot_synteny_schematic(minimal)
+```
+
+![](index_files/figure-commonmark/cell-5-output-1.png)
+
+The plot can be customized, e.g. by including color:
+
+``` python
+minimal['color'] = [
+    "red",
+    "orange",
+    "gold",
+    "lightgreen",
+    "forestgreen",
+    "royalblue",
+    "darkblue",
+    "darkmagenta",
+    "magenta",
+]
+
+plot_synteny_schematic(minimal)
+```
+
+![](index_files/figure-commonmark/cell-6-output-1.png)
+
+We can also edit the dataframe to indicate missing genes:
+
+``` python
+from geneorder import util
+```
+
+``` python
+minimal = util.insert_gap(
+    minimal,
+    "Hox8",
+    "Hox10",
+    "gene_name",
+    no_gaps=1,
+    purge_columns=["gene_id", "color"],
+)
+```
+
+``` python
+plot_synteny_schematic(minimal)
+```
+
+![](index_files/figure-commonmark/cell-9-output-1.png)
+
+For more details, please refer to the
+[documentation](https://galicae.github.io/geneorder/).
