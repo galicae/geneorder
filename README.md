@@ -54,20 +54,61 @@ context. The least information that is needed for that is
 
 ``` python
 import pandas as pd
+
 from geneorder.core import plot_synteny_schematic
 ```
 
 ``` python
 gene_dict = {
-    'gene_name': ['Hox1', 'Hox2', 'Hox3', 'Hox4', 'Hox5', 'Hox6', 'Hox7', 'Hox8', 'Hox10'],
-    'gene_id': ['PB.8615', 'g9718', 'PB.8616', 'g9720', 'g9721', 'PB.8617', 'g9723', 'g9724', 'g9725'],
-    'start': [1927066, 1998922, 2058396, 2195412, 2351936, 2373415, 2565196, 2916314, 2986021],
-    'end': [1936157, 2024148, 2065953, 2206712, 2354374, 2375678, 2594468, 2926445, 2996225],
+    "gene_name": [
+        "Hox1",
+        "Hox2",
+        "Hox3",
+        "Hox4",
+        "Hox5",
+        "Hox6",
+        "Hox7",
+        "Hox8",
+        "Hox10",
+    ],
+    "gene_id": [
+        "PB.8615",
+        "g9718",
+        "PB.8616",
+        "g9720",
+        "g9721",
+        "PB.8617",
+        "g9723",
+        "g9724",
+        "g9725",
+    ],
+    "start": [
+        1927066,
+        1998922,
+        2058396,
+        2195412,
+        2351936,
+        2373415,
+        2565196,
+        2916314,
+        2986021,
+    ],
+    "end": [
+        1936157,
+        2024148,
+        2065953,
+        2206712,
+        2354374,
+        2375678,
+        2594468,
+        2926445,
+        2996225,
+    ],
 }
 
 minimal = pd.DataFrame(gene_dict)
-minimal['seqid'] = 'pseudochrom_56'
-minimal['strand'] = '-'
+minimal["seqid"] = "pseudochrom_56"
+minimal["strand"] = "-"
 ```
 
 ``` python
@@ -110,7 +151,7 @@ plot_synteny_schematic(minimal)
 The plot can be customized, e.g. by including color:
 
 ``` python
-minimal['color'] = [
+minimal["color"] = [
     "red",
     "orange",
     "gold",
