@@ -2,6 +2,11 @@
 
 <!-- do not remove -->
 
+## 0.0.3
+
+Improved color handling; now hex codes can be used for plotting if palette is set to `None`.
+
+
 ## 0.0.2
 
 No changes to the core functionality. While trying to upload on PyPi, I found out that the initial

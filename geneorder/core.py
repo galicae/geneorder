@@ -29,6 +29,9 @@ def plot_synteny(
     locus_name: str = "gene_name",  # the GFF column that holds the gene/mRNA symbol. This is usually a tag in the "attributes" column of a well-behaved GFF and should have been extracted prior to this step. It will be plotted according to the `gene_name_offset` parameter.
     fig_title: str = None,  # Figure title.
     save: str | Path = "synteny.svg",  # path to save an SVG image.
+    palette: (
+        dict | None
+    ) = mcolors.CSS4_COLORS,  # color palette in dictionary form. If None, the color column is expected to be a string that can be interpreted as color.
     chromosome_color: str = "lightgray",  # the color of the line representing the molecule the genes are plotted on.
     backup_gene_color: str = "darkgray",  # If the GFF has no column titled "color", the gene arrows will be filled using this color.
     gene_name_offset: float = 0.02,  # Default offset for plotting gene names if the GFF has no column titled "offset".
@@ -61,7 +64,10 @@ def plot_synteny(
         start = gene[locus_start]
         end = gene[locus_end]
         if "color" in gene.index:
-            color = mcolors.CSS4_COLORS[gene["color"]]
+            if palette is not None:
+                color = mcolors.CSS4_COLORS[gene["color"]]
+            else:
+                color = gene["color"]
         else:
             color = backup_gene_color
 
@@ -104,7 +110,7 @@ def plot_synteny(
             )
         plt.savefig(save, bbox_inches="tight", pad_inches=0)
 
-# %% ../nbs/00_core.ipynb 14
+# %% ../nbs/00_core.ipynb 17
 def plot_synteny_schematic(
     gff: pd.DataFrame,  # a GFF in Pandas dataframe form. Only includes the genes of the syntenic block in question.
     block_gene: float = 400,  # length of a gene arrow, in plot coordinate space.
@@ -113,6 +119,9 @@ def plot_synteny_schematic(
     locus_end: str = "end",  # the GFF column that describes the end coordinate of the entities (e.g. gene, mRNA) to be plotted on the chromosome. In a well-behaved GFF, this should be "end".
     molecule: str = "seqid",  # the GFF column that holds the molecule name (chromosome/scaffold/contig ID). In a well-behaved GFF, this should be "seqid".
     locus_name: str = "gene_name",  # the GFF column that holds the gene/mRNA symbol. This is usually a tag in the "attributes" column of a well-behaved GFF and should have been extracted prior to this step. It will be plotted according to the `gene_name_offset` parameter.
+    palette: (
+        dict | None
+    ) = mcolors.CSS4_COLORS,  # color palette in dictionary form. If None, the color column is expected to be a string that can be interpreted as color.
     chromosome_color: str = "black",  # the color of the line representing the molecule the genes are plotted on.
     backup_gene_color: str = "darkgray",  # If the GFF has no column titled "color", the gene arrows will be filled using this color.
     gene_name_offset: float = 0.02,  # Default offset for plotting gene names if the GFF has no column titled "offset".
@@ -159,7 +168,10 @@ def plot_synteny_schematic(
         if "color" in gene.index:
             if gene["color"] == "":
                 continue
-            color = mcolors.CSS4_COLORS[gene["color"]]
+            if palette is not None:
+                color = mcolors.CSS4_COLORS[gene["color"]]
+            else:
+                color = gene["color"]
         else:
             color = backup_gene_color
 
