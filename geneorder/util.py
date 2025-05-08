@@ -4,7 +4,7 @@
 
 # %% auto 0
 __all__ = ['read_gff', 'gff_attribute_selector', 'decorate', 'filter', 'syntenic_block_borders', 'read_aln', 'estimate_plot_size',
-           'insert_gap']
+           'insert_gap', 'flip']
 
 # %% ../nbs/01_util.ipynb 4
 import os
@@ -163,15 +163,19 @@ def estimate_plot_size(
 # %% ../nbs/01_util.ipynb 23
 def insert_gap(
     gff: pd.DataFrame,
-    locus1,
-    locus2,
-    identifier,
+    locus1=None,
+    locus2=None,
+    identifier="gene_id",
     purge_columns=None,
     no_gaps=1,
 ) -> pd.DataFrame:
     "This function inserts a number of dummy entries between two loci (lines) in the GFF DataFrame."
-    loc1_index = gff[gff[identifier] == locus1].index[0]
-    loc2_index = gff[gff[identifier] == locus2].index[0]
+    loc1_index = -1
+    loc2_index = len(gff)
+    if locus1 is not None:
+        loc1_index = gff[gff[identifier] == locus1].index[0]
+    if locus2 is not None:
+        loc2_index = gff[gff[identifier] == locus2].index[0]
     if loc2_index - loc1_index != 1:
         raise ValueError(
             f"The two loci are not consecutive; their indices are {locus1}: {loc1_index} and {locus2}: {loc2_index}, respectively. Please refer to your input dataframe."
@@ -179,15 +183,41 @@ def insert_gap(
 
     offset_step = 1 / (no_gaps + 1)
 
+    copy = loc1_index
+    if locus1 is None:
+        copy = loc2_index
+
     for i in range(no_gaps):
         offset = (i + 1) * offset_step
-        tmp = gff.loc[loc1_index].copy()
-        tmp["start"] = tmp["end"] + 1 + (i * 2)
-        tmp["end"] = tmp["start"] + 1
+        tmp = gff.loc[copy].copy()
+        if locus1 is not None:
+            tmp["start"] = tmp["end"] + 1 + (i * 2)
+            tmp["end"] = tmp["start"] + 1
+        else:
+            tmp["start"] = tmp["start"] - 1 - (i * 2)
+            tmp["end"] = tmp["start"] + 1
+
         tmp[identifier] = f"gap_{locus1}-{i}"
         for column in purge_columns:
             tmp[column] = ""
         gff.loc[loc1_index + offset] = tmp
 
     gff = gff.sort_index().reset_index(drop=True)
+    return gff
+
+# %% ../nbs/01_util.ipynb 29
+def _flip_strand(s):
+    if s == "+":
+        return "-"
+    else:
+        return "-"
+
+
+# | export
+
+
+def flip(gff):
+    gff["start"] = -gff["start"]
+    gff["end"] = -gff["end"]
+    gff["strand"] = gff["strand"].apply(_flip_strand)
     return gff

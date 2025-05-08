@@ -76,10 +76,17 @@ def plot_synteny(
         else:
             offset = gene_name_offset
 
+        if gene["strand"] == "-":
+            arrow_from = end
+            arrow_to = start - end - 1000
+        else:
+            arrow_from = start
+            arrow_to = end - start + 1000
+
         ax.arrow(
-            end,
+            arrow_from,
             0,
-            start - end - 1000,
+            arrow_to,
             0,
             head_width=0.05,
             head_length=1000,
@@ -181,10 +188,17 @@ def plot_synteny_schematic(
             offset = gene_name_offset
 
         # Draws an arrow from (x, y) to (x + dx, y + dy). The width of the arrow is scaled by width
+        if gene["strand"] == "-":
+            arrow_from = end
+            arrow_to = start - end + head_length
+        else:
+            arrow_from = start
+            arrow_to = end - start - head_length
+
         arrow = mpatches.FancyArrow(
-            end,
+            arrow_from,
             0,
-            start - end + head_length,
+            arrow_to,
             0,
             width=gene_width,
             head_length=head_length,
