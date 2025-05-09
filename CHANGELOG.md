@@ -2,6 +2,14 @@
 
 <!-- do not remove -->
 
+## 0.0.4
+
+* Schematic synteny plot can now deal with multiple molecules.
+* schematic synteny plot now expects an ordered dataframe and will not sort automatically according
+  to locus start coordinates.
+* Added function to flip syntenic locus for plotting consistency.
+
+
 ## 0.0.3
 
 Improved color handling; now hex codes can be used for plotting if palette is set to `None`.

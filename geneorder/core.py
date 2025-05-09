@@ -119,16 +119,18 @@ def plot_synteny(
 
 # %% ../nbs/00_core.ipynb 17
 def plot_synteny_schematic(
-    gff: pd.DataFrame,  # a GFF in Pandas dataframe form. Only includes the genes of the syntenic block in question.
+    gff: pd.DataFrame,  # a GFF in Pandas dataframe form. Only includes the genes of the syntenic block in question. Assumed to be sorted in plotting order.
     block_gene: float = 400,  # length of a gene arrow, in plot coordinate space.
     block_dist: float = 200,  # length of gap between successive genes, in plot coordinate space.
     locus_start: str = "start",  # the GFF column that describes the start coordinate of the entities (e.g. gene, mRNA) to be plotted on the chromosome. In a well-behaved GFF, this should be "start".
     locus_end: str = "end",  # the GFF column that describes the end coordinate of the entities (e.g. gene, mRNA) to be plotted on the chromosome. In a well-behaved GFF, this should be "end".
     molecule: str = "seqid",  # the GFF column that holds the molecule name (chromosome/scaffold/contig ID). In a well-behaved GFF, this should be "seqid".
     locus_name: str = "gene_name",  # the GFF column that holds the gene/mRNA symbol. This is usually a tag in the "attributes" column of a well-behaved GFF and should have been extracted prior to this step. It will be plotted according to the `gene_name_offset` parameter.
+    interrupted: bool = False,  # is the syntenic cluster on multiple pseudomolecules?
     palette: (
         dict | None
     ) = mcolors.CSS4_COLORS,  # color palette in dictionary form. If None, the color column is expected to be a string that can be interpreted as color.
+    fontsize: int = 30,  # this fontsize works well for default sizes, but is probably too big for smaller plots
     chromosome_color: str = "black",  # the color of the line representing the molecule the genes are plotted on.
     backup_gene_color: str = "darkgray",  # If the GFF has no column titled "color", the gene arrows will be filled using this color.
     gene_name_offset: float = 0.02,  # Default offset for plotting gene names if the GFF has no column titled "offset".
@@ -147,21 +149,24 @@ def plot_synteny_schematic(
     # 'Function to plot a syntenic cluster of genes. Each gene is represented by an arrow; left-facing arrows indicate a minus orientation, and right-facing arrows a plus orientation. The genes can be colored using named colors from the `matplotlib.colors.CSS4_COLORS` collection.'
 
     if len(gff[molecule].unique()) > 1:
-        raise ValueError(
-            f"There are multiple molecules represented in the input GFF: {gff[molecule].unique()}. Please only input a GFF with genes on a single molecule."
-        )
+        if not interrupted:
+            raise ValueError(
+                f"There are multiple molecules represented in the input GFF: {gff[molecule].unique()}. Please only input a GFF with genes on a single molecule."
+            )
 
     if figsize is None:
         figsize = util.estimate_plot_size(gff)
 
     fig, ax = plt.subplots(figsize=figsize)
-
     # the total length is:
     # - the number of gene blocks
     # - the number of gaps between genes (number of gene blocks - 1)
     # - the start and end gap
+    gff_genes = gff[gff[molecule] != ""]
     total_length = (
-        (len(gff) * block_gene) + (2 * block_dist) + ((len(gff) - 1) * block_dist)
+        (len(gff_genes) * block_gene)
+        + (2 * block_dist)
+        + ((len(gff_genes) - 1) * block_dist)
     )
     # plot contig
     ax.plot(
@@ -169,7 +174,23 @@ def plot_synteny_schematic(
     )
     start = 0
     end = 0
-    for name, gene in gff.sort_values(locus_start).iterrows():
+    genes_seen = 0
+    for i, gene in gff.iterrows():
+        if gene[molecule] != "":
+            genes_seen += 1
+        if gene[locus_start] == "":
+            # as many gene blocks as we walked, plus as many gaps minus one
+            break_start = (genes_seen) * block_gene + (genes_seen + 0.2) * block_dist
+            break_end = break_start + 0.6 * block_dist
+            ax.plot(
+                [break_start, break_end],
+                [0, 0],
+                color="white",
+                linewidth=chromosome_width + 2,
+            )
+            offset = gene_name_offset
+            continue
+
         start = end + block_dist
         end = start + block_gene
         if "color" in gene.index:
@@ -212,7 +233,11 @@ def plot_synteny_schematic(
         ax.add_patch(arrow)
         # ax.arrow(end, 0, start-end-100, 0, head_width=0.05, head_length=100, fc=color, ec=color, linewidth=gene_width)
         ax.text(
-            end - block_gene, offset * 60, gene[locus_name], color="black", fontsize=30
+            end - block_gene,
+            offset * 60,
+            gene[locus_name],
+            color="black",
+            fontsize=fontsize,
         )
 
     ax.set_yticks([])

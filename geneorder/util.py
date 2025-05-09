@@ -4,7 +4,7 @@
 
 # %% auto 0
 __all__ = ['read_gff', 'gff_attribute_selector', 'decorate', 'filter', 'syntenic_block_borders', 'read_aln', 'estimate_plot_size',
-           'insert_gap', 'flip']
+           'insert_gap', 'flip', 'insert_break']
 
 # %% ../nbs/01_util.ipynb 4
 import os
@@ -209,15 +209,42 @@ def insert_gap(
 def _flip_strand(s):
     if s == "+":
         return "-"
+    elif s == "-":
+        return "+"
     else:
-        return "-"
+        return s
 
 
 # | export
 
 
 def flip(gff):
-    gff["start"] = -gff["start"]
-    gff["end"] = -gff["end"]
+    gff["start"] = (-1) * gff["start"]
+    gff["end"] = (-1) * gff["end"]
     gff["strand"] = gff["strand"].apply(_flip_strand)
+    gff.index = gff.index[::-1]
+    return gff.sort_index()
+
+# %% ../nbs/01_util.ipynb 31
+def insert_break(
+    gff: pd.DataFrame,
+    locus1=None,
+    locus2=None,
+    identifier="gene_id",
+) -> pd.DataFrame:
+    "This function inserts a molecule break between two loci (lines) in the GFF DataFrame."
+    loc1_index = gff[gff[identifier] == locus1].index[0]
+    loc2_index = gff[gff[identifier] == locus2].index[0]
+    if loc2_index - loc1_index != 1:
+        raise ValueError(
+            f"The two loci are not consecutive; their indices are {locus1}: {loc1_index} and {locus2}: {loc2_index}, respectively. Please refer to your input dataframe."
+        )
+
+    tmp = gff.loc[loc1_index].copy()
+    for c in tmp.index:
+        tmp[c] = ""
+    tmp[identifier] = f"break"
+    gff.loc[loc1_index + 0.5] = tmp
+
+    gff = gff.sort_index().reset_index(drop=True)
     return gff
