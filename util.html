@@ -1,0 +1,1951 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="I/O functions">
+
+<title>util – geneorder</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-fe8f458f31a467b51aeabd2275c1e88a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="util – geneorder">
+<meta property="og:description" content="I/O functions">
+<meta property="og:site_name" content="geneorder">
+<meta name="twitter:title" content="util – geneorder">
+<meta name="twitter:description" content="I/O functions">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">geneorder</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./util.html">util</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">geneorder</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./core.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">core</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./util.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">util</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#read_gff" id="toc-read_gff" class="nav-link active" data-scroll-target="#read_gff">read_gff</a></li>
+  <li><a href="#gff_attribute_selector" id="toc-gff_attribute_selector" class="nav-link" data-scroll-target="#gff_attribute_selector">gff_attribute_selector</a></li>
+  <li><a href="#filter" id="toc-filter" class="nav-link" data-scroll-target="#filter">filter</a></li>
+  <li><a href="#decorate" id="toc-decorate" class="nav-link" data-scroll-target="#decorate">decorate</a></li>
+  <li><a href="#syntenic_block_borders" id="toc-syntenic_block_borders" class="nav-link" data-scroll-target="#syntenic_block_borders">syntenic_block_borders</a></li>
+  <li><a href="#read_aln" id="toc-read_aln" class="nav-link" data-scroll-target="#read_aln">read_aln</a></li>
+  <li><a href="#estimate_plot_size" id="toc-estimate_plot_size" class="nav-link" data-scroll-target="#estimate_plot_size">estimate_plot_size</a></li>
+  <li><a href="#insert_gap" id="toc-insert_gap" class="nav-link" data-scroll-target="#insert_gap">insert_gap</a></li>
+  <li><a href="#flip" id="toc-flip" class="nav-link" data-scroll-target="#flip">flip</a></li>
+  <li><a href="#insert_break" id="toc-insert_break" class="nav-link" data-scroll-target="#insert_break">insert_break</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/galicae/geneorder/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="util.html.md"><i class="bi bi-file-code"></i>CommonMark</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">util</h1>
+</div>
+
+<div>
+  <div class="description">
+    I/O functions
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<p>The information about the location of genes in a genome can come from anywhere, but it is typically stored in a GFF3 file. While this is far from a standardized format, there exist some <em>guidelines</em> about how a (syntactically) valid GFF3 file should look like; they can be found <a href="https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md">here</a>. Such a typical, 9-column, tab-separated file is what I have mostly been working with. If your GFF3 looks different you will have to figure out how to read it in yourself - or <a href="https://github.com/galicae/geneorder/issues/new">open an issue</a> and I can try to help you.</p>
+<hr>
+<p><a href="https://github.com/galicae/geneorder/blob/main/geneorder/util.py#L19" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="read_gff" class="level3">
+<h3 class="anchored" data-anchor-id="read_gff">read_gff</h3>
+<blockquote class="blockquote">
+<pre><code> read_gff (loc:str|pathlib.Path, gff_columns:list=['seqid', 'source',
+           'type', 'start', 'end', 'score', 'strand', 'phase',
+           'attributes'], skiprows:int=1, header:Union[int,collections.abc
+           .Sequence[int],NoneType,Literal['infer']]=None, sep:str='\t',
+           **kwargs)</code></pre>
+</blockquote>
+<p><em>A function to read a GFF3 file. Expects 9 tab-separated fields, and will try to name the columns according to https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md</em></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>loc</td>
+<td>str | pathlib.Path</td>
+<td></td>
+<td>input filepath</td>
+</tr>
+<tr class="even">
+<td>gff_columns</td>
+<td>list</td>
+<td>[‘seqid’, ‘source’, ‘type’, ‘start’, ‘end’, ‘score’, ‘strand’, ‘phase’, ‘attributes’]</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>skiprows</td>
+<td>int</td>
+<td>1</td>
+<td>how many rows to skip in the beginning</td>
+</tr>
+<tr class="even">
+<td>header</td>
+<td>Union</td>
+<td>None</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>sep</td>
+<td>str</td>
+<td></td>
+<td>separator for the table</td>
+</tr>
+<tr class="even">
+<td>kwargs</td>
+<td>VAR_KEYWORD</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><strong>Returns</strong></td>
+<td><strong>DataFrame</strong></td>
+<td></td>
+<td><strong>the GFF3 file in DataFrame form</strong></td>
+</tr>
+</tbody>
+</table>
+<p>For instance, let’s try and read an example. This is a fake GFF3 file based on the <em>Pycnogonum litorale</em> Hox gene cluster; for the real one, please refer to our <a href="https://doi.org/10.1101/2024.11.20.624475">work on the sea spider</a>.</p>
+<div id="cell-5" class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>gff <span class="op">=</span> read_gff(os.environ[<span class="st">"EXAMPLE_DATA_PATH"</span>] <span class="op">+</span> <span class="st">"plit.gff3"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>gff</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">seqid</th>
+<th data-quarto-table-cell-role="th">source</th>
+<th data-quarto-table-cell-role="th">type</th>
+<th data-quarto-table-cell-role="th">start</th>
+<th data-quarto-table-cell-role="th">end</th>
+<th data-quarto-table-cell-role="th">score</th>
+<th data-quarto-table-cell-role="th">strand</th>
+<th data-quarto-table-cell-role="th">phase</th>
+<th data-quarto-table-cell-role="th">attributes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>pseudochrom_56</td>
+<td>PacBio</td>
+<td>gene</td>
+<td>1927066</td>
+<td>1936157</td>
+<td>.</td>
+<td>-</td>
+<td>.</td>
+<td>ID=PB.8615;function=Homeobox domain;gene=Hox1-...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>pseudochrom_56</td>
+<td>PacBio</td>
+<td>mRNA</td>
+<td>1927066</td>
+<td>1936157</td>
+<td>.</td>
+<td>-</td>
+<td>.</td>
+<td>ID=PB.8615.1;Parent=PB.8615;function=Homeobox ...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>pseudochrom_56</td>
+<td>PacBio</td>
+<td>exon</td>
+<td>1927066</td>
+<td>1928028</td>
+<td>.</td>
+<td>-</td>
+<td>.</td>
+<td>ID=PB.8615.1.exon1;Parent=PB.8615.1;function=H...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>pseudochrom_56</td>
+<td>PacBio</td>
+<td>exon</td>
+<td>1935229</td>
+<td>1936157</td>
+<td>.</td>
+<td>-</td>
+<td>.</td>
+<td>ID=PB.8615.1.exon2;Parent=PB.8615.1;function=H...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>pseudochrom_56</td>
+<td>PacBio</td>
+<td>CDS</td>
+<td>1927066</td>
+<td>1928028</td>
+<td>.</td>
+<td>-</td>
+<td>1</td>
+<td>ID=PB.8615.1.CDS1;Parent=PB.8615.1;function=Ho...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">134</td>
+<td>scaffold_44</td>
+<td>AUGUSTUS</td>
+<td>CDS</td>
+<td>1998922</td>
+<td>2000654</td>
+<td>0.72</td>
+<td>-</td>
+<td>2</td>
+<td>ID=g13061.t1.CDS1;Parent=g13061.t1;function=se...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">135</td>
+<td>scaffold_44</td>
+<td>AUGUSTUS</td>
+<td>CDS</td>
+<td>2023821</td>
+<td>2024148</td>
+<td>0.53</td>
+<td>-</td>
+<td>0</td>
+<td>ID=g13061.t1.CDS2;Parent=g13061.t1;function=se...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">136</td>
+<td>scaffold_44</td>
+<td>GeneMark.hmm3</td>
+<td>mRNA</td>
+<td>2023807</td>
+<td>2024148</td>
+<td>.</td>
+<td>-</td>
+<td>.</td>
+<td>ID=g13061.t2;Parent=g13061;function=sequence-s...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">137</td>
+<td>scaffold_44</td>
+<td>GeneMark.hmm3</td>
+<td>exon</td>
+<td>2023807</td>
+<td>2024148</td>
+<td>.</td>
+<td>-</td>
+<td>0</td>
+<td>ID=g13061.t2.exon1;Parent=g13061.t2;function=s...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">138</td>
+<td>scaffold_44</td>
+<td>GeneMark.hmm3</td>
+<td>CDS</td>
+<td>2023807</td>
+<td>2024148</td>
+<td>.</td>
+<td>-</td>
+<td>0</td>
+<td>ID=g13061.t2.CDS1;Parent=g13061.t2;function=se...</td>
+</tr>
+</tbody>
+</table>
+
+<p>139 rows × 9 columns</p>
+</div>
+</div>
+</div>
+<p>To begin with, we would like to visualize the ‘real’ Hox genes. We are also only interested in plotting entire genes (no exon structure), so we can filter the GFF rows based on that. We should also extract the gene IDs from the table to help us filter. Furthermore, we should be extracting gene names, in case we want to plot them too.</p>
+<hr>
+<p><a href="https://github.com/galicae/geneorder/blob/main/geneorder/util.py#L45" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="gff_attribute_selector" class="level3">
+<h3 class="anchored" data-anchor-id="gff_attribute_selector">gff_attribute_selector</h3>
+<blockquote class="blockquote">
+<pre><code> gff_attribute_selector (line, sep:str=';', select='ID')</code></pre>
+</blockquote>
+<p><em>A function that extracts the value of a specified field from the attributes of a GFF3 line. Should be used on the <code>attributes</code> field of the corresponding pandas DataFrame.</em></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>line</td>
+<td></td>
+<td></td>
+<td>the attributes field of a GFF3 line</td>
+</tr>
+<tr class="even">
+<td>sep</td>
+<td>str</td>
+<td>;</td>
+<td>the field separator. Should be a semicolon for a GFF3 file.</td>
+</tr>
+<tr class="odd">
+<td>select</td>
+<td>str</td>
+<td>ID</td>
+<td>the field ID. Should be one that is included in the GFF3 file. Refer to https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md for possibilities, or choose a manually defined tag that you know is present in the file.</td>
+</tr>
+<tr class="even">
+<td><strong>Returns</strong></td>
+<td><strong>str</strong></td>
+<td></td>
+<td><strong>the value of field <code>select</code></strong></td>
+</tr>
+</tbody>
+</table>
+<div id="cell-8" class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>gff[<span class="st">"gene_id"</span>] <span class="op">=</span> gff[<span class="st">"attributes"</span>].<span class="bu">apply</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">lambda</span> x: gff_attribute_selector(x, select<span class="op">=</span><span class="st">"ID"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>gff[<span class="st">"gene_name"</span>] <span class="op">=</span> gff[<span class="st">"attributes"</span>].<span class="bu">apply</span>(</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">lambda</span> x: gff_attribute_selector(x, select<span class="op">=</span><span class="st">"gene"</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-9" class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>hox_genes <span class="op">=</span> [</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"PB.8615"</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"g9718"</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"PB.8616"</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"g9720"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"g9721"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"PB.8617"</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"g9723"</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"g9724"</span>,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"g9725"</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>is_hox <span class="op">=</span> gff[<span class="st">"gene_id"</span>].isin(hox_genes)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>is_gene <span class="op">=</span> gff[<span class="st">"type"</span>] <span class="op">==</span> <span class="st">"gene"</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>slim <span class="op">=</span> gff[is_gene <span class="op">&amp;</span> is_hox]</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>slim</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">seqid</th>
+<th data-quarto-table-cell-role="th">source</th>
+<th data-quarto-table-cell-role="th">type</th>
+<th data-quarto-table-cell-role="th">start</th>
+<th data-quarto-table-cell-role="th">end</th>
+<th data-quarto-table-cell-role="th">score</th>
+<th data-quarto-table-cell-role="th">strand</th>
+<th data-quarto-table-cell-role="th">phase</th>
+<th data-quarto-table-cell-role="th">attributes</th>
+<th data-quarto-table-cell-role="th">gene_id</th>
+<th data-quarto-table-cell-role="th">gene_name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>pseudochrom_56</td>
+<td>PacBio</td>
+<td>gene</td>
+<td>1927066</td>
+<td>1936157</td>
+<td>.</td>
+<td>-</td>
+<td>.</td>
+<td>ID=PB.8615;function=Homeobox domain;gene=Hox1-...</td>
+<td>PB.8615</td>
+<td>Hox1-A</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">6</td>
+<td>pseudochrom_56</td>
+<td>AUGUSTUS</td>
+<td>gene</td>
+<td>1998922</td>
+<td>2024148</td>
+<td>.</td>
+<td>-</td>
+<td>.</td>
+<td>ID=g9718;function=sequence-specific DNA bindin...</td>
+<td>g9718</td>
+<td>Hox2-A</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">15</td>
+<td>pseudochrom_56</td>
+<td>PacBio</td>
+<td>gene</td>
+<td>2058396</td>
+<td>2065953</td>
+<td>.</td>
+<td>-</td>
+<td>.</td>
+<td>ID=PB.8616;function=homeobox protein;gene=Hox3...</td>
+<td>PB.8616</td>
+<td>Hox3-A</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">56</td>
+<td>pseudochrom_56</td>
+<td>AUGUSTUS</td>
+<td>gene</td>
+<td>2195412</td>
+<td>2206712</td>
+<td>.</td>
+<td>-</td>
+<td>.</td>
+<td>ID=g9720;function=sequence-specific DNA bindin...</td>
+<td>g9720</td>
+<td>Hox4-A</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">62</td>
+<td>pseudochrom_56</td>
+<td>AUGUSTUS</td>
+<td>gene</td>
+<td>2351936</td>
+<td>2354374</td>
+<td>.</td>
+<td>-</td>
+<td>.</td>
+<td>ID=g9721;function=sequence-specific DNA bindin...</td>
+<td>g9721</td>
+<td>Hox5-A</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">68</td>
+<td>pseudochrom_56</td>
+<td>PacBio</td>
+<td>gene</td>
+<td>2373415</td>
+<td>2375678</td>
+<td>.</td>
+<td>-</td>
+<td>.</td>
+<td>ID=PB.8617;function=sequence-specific DNA bind...</td>
+<td>PB.8617</td>
+<td>Hox6-A</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">79</td>
+<td>pseudochrom_56</td>
+<td>AUGUSTUS</td>
+<td>gene</td>
+<td>2565196</td>
+<td>2594468</td>
+<td>.</td>
+<td>-</td>
+<td>.</td>
+<td>ID=g9723;function=sequence-specific DNA bindin...</td>
+<td>g9723</td>
+<td>Hox7-A</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">85</td>
+<td>pseudochrom_56</td>
+<td>AUGUSTUS</td>
+<td>gene</td>
+<td>2916314</td>
+<td>2926445</td>
+<td>.</td>
+<td>-</td>
+<td>.</td>
+<td>ID=g9724;function=sequence-specific DNA bindin...</td>
+<td>g9724</td>
+<td>Hox8-A</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">91</td>
+<td>pseudochrom_56</td>
+<td>AUGUSTUS</td>
+<td>gene</td>
+<td>2986021</td>
+<td>2996225</td>
+<td>.</td>
+<td>-</td>
+<td>.</td>
+<td>ID=g9725;function=sequence-specific DNA bindin...</td>
+<td>g9725</td>
+<td>Hox10-A</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>This table basically already contains all the information we need: * the name of the chromosome * the location of each gene * the strand of each gene * the directionality of each gene (given by relative start/end positions) * the name of each gene (hidden in the attributes)</p>
+<p>The only thing that’s left is to extract this information in the way that is needed for the plotter:</p>
+<div id="cell-11" class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>hox <span class="op">=</span> slim[[<span class="st">"seqid"</span>, <span class="st">"gene_name"</span>, <span class="st">"gene_id"</span>, <span class="st">"start"</span>, <span class="st">"end"</span>]].reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>hox</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">seqid</th>
+<th data-quarto-table-cell-role="th">gene_name</th>
+<th data-quarto-table-cell-role="th">gene_id</th>
+<th data-quarto-table-cell-role="th">start</th>
+<th data-quarto-table-cell-role="th">end</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>pseudochrom_56</td>
+<td>Hox1-A</td>
+<td>PB.8615</td>
+<td>1927066</td>
+<td>1936157</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>pseudochrom_56</td>
+<td>Hox2-A</td>
+<td>g9718</td>
+<td>1998922</td>
+<td>2024148</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>pseudochrom_56</td>
+<td>Hox3-A</td>
+<td>PB.8616</td>
+<td>2058396</td>
+<td>2065953</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>pseudochrom_56</td>
+<td>Hox4-A</td>
+<td>g9720</td>
+<td>2195412</td>
+<td>2206712</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>pseudochrom_56</td>
+<td>Hox5-A</td>
+<td>g9721</td>
+<td>2351936</td>
+<td>2354374</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>pseudochrom_56</td>
+<td>Hox6-A</td>
+<td>PB.8617</td>
+<td>2373415</td>
+<td>2375678</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>pseudochrom_56</td>
+<td>Hox7-A</td>
+<td>g9723</td>
+<td>2565196</td>
+<td>2594468</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>pseudochrom_56</td>
+<td>Hox8-A</td>
+<td>g9724</td>
+<td>2916314</td>
+<td>2926445</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>pseudochrom_56</td>
+<td>Hox10-A</td>
+<td>g9725</td>
+<td>2986021</td>
+<td>2996225</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/galicae/geneorder/blob/main/geneorder/util.py#L75" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="filter" class="level3">
+<h3 class="anchored" data-anchor-id="filter">filter</h3>
+<blockquote class="blockquote">
+<pre><code> filter (gff, filter_by_type=True, filter_type='gene',
+         filter_by_field=True, field='gene_id', field_values=None)</code></pre>
+</blockquote>
+<hr>
+<p><a href="https://github.com/galicae/geneorder/blob/main/geneorder/util.py#L58" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="decorate" class="level3">
+<h3 class="anchored" data-anchor-id="decorate">decorate</h3>
+<blockquote class="blockquote">
+<pre><code> decorate (gff:pandas.core.frame.DataFrame, attributes:dict={'gene_id':
+           'ID', 'gene_name': 'gene'})</code></pre>
+</blockquote>
+<p><em>A function that</em></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>gff</td>
+<td>DataFrame</td>
+<td></td>
+<td>a GFF file in Pandas dataframe form</td>
+</tr>
+<tr class="even">
+<td>attributes</td>
+<td>dict</td>
+<td>{‘gene_id’: ‘ID’, ‘gene_name’: ‘gene’}</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a href="https://github.com/galicae/geneorder/blob/main/geneorder/util.py#L106" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="syntenic_block_borders" class="level3">
+<h3 class="anchored" data-anchor-id="syntenic_block_borders">syntenic_block_borders</h3>
+<blockquote class="blockquote">
+<pre><code> syntenic_block_borders (gff:pandas.core.frame.DataFrame,
+                         flank_length:int=None, start:str='start',
+                         end:str='end')</code></pre>
+</blockquote>
+<p><em>A function to calculate the boundaries of a syntenic block. It automatically pads the boundaries by an additional 5% of total length on both ends.</em></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>gff</td>
+<td>DataFrame</td>
+<td></td>
+<td>a GFF in Pandas dataframe form. Only includes the genes of the syntenic block in question.</td>
+</tr>
+<tr class="even">
+<td>flank_length</td>
+<td>int</td>
+<td>None</td>
+<td>the amount of space to be granted on both sides of the syntenic region, in basepairs. If unspecified, it will be set to 5% of the syntenic block length.</td>
+</tr>
+<tr class="odd">
+<td>start</td>
+<td>str</td>
+<td>start</td>
+<td>the GFF column with the start position of the gene (“start”).</td>
+</tr>
+<tr class="even">
+<td>end</td>
+<td>str</td>
+<td>end</td>
+<td>the GFF column with the end position of the gene (“end”).</td>
+</tr>
+<tr class="odd">
+<td><strong>Returns</strong></td>
+<td><strong>(&lt;class ‘int’&gt;, &lt;class ‘int’&gt;)</strong></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div id="cell-15" class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>test_fail(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    syntenic_block_borders,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    contains<span class="op">=</span><span class="st">"The parameter `flank_length` has to be an integer"</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    args<span class="op">=</span>(gff,),</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    kwargs<span class="op">=</span><span class="bu">dict</span>(flank_length<span class="op">=</span><span class="fl">5.2</span>),</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The process of reading in a GFF3 file can be expedited with the</p>
+<hr>
+<p><a href="https://github.com/galicae/geneorder/blob/main/geneorder/util.py#L125" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="read_aln" class="level3">
+<h3 class="anchored" data-anchor-id="read_aln">read_aln</h3>
+<blockquote class="blockquote">
+<pre><code> read_aln (m8:str, id_sep:str|None=None, **kwargs)</code></pre>
+</blockquote>
+<p><em>Reads</em></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>m8</td>
+<td>str</td>
+<td></td>
+<td>the path to the MMseqs2 alignment table file</td>
+</tr>
+<tr class="even">
+<td>id_sep</td>
+<td>str | None</td>
+<td>None</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>kwargs</td>
+<td>VAR_KEYWORD</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><strong>Returns</strong></td>
+<td><strong>DataFrame</strong></td>
+<td></td>
+<td><strong>the tabulated form of the alignment results.</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a href="https://github.com/galicae/geneorder/blob/main/geneorder/util.py#L155" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="estimate_plot_size" class="level3">
+<h3 class="anchored" data-anchor-id="estimate_plot_size">estimate_plot_size</h3>
+<blockquote class="blockquote">
+<pre><code> estimate_plot_size (gff, width_factor:int=3, height:int=2)</code></pre>
+</blockquote>
+<div id="cell-19" class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> estimate_plot_size(gff[gff[<span class="st">"type"</span>] <span class="op">==</span> <span class="st">"gene"</span>]) <span class="op">==</span> (<span class="dv">45</span>, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<p><a href="https://github.com/galicae/geneorder/blob/main/geneorder/util.py#L164" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="insert_gap" class="level3">
+<h3 class="anchored" data-anchor-id="insert_gap">insert_gap</h3>
+<blockquote class="blockquote">
+<pre><code> insert_gap (gff:pandas.core.frame.DataFrame, locus1=None, locus2=None,
+             identifier='gene_id', purge_columns=None, no_gaps=1)</code></pre>
+</blockquote>
+<p><em>This function inserts a number of dummy entries between two loci (lines) in the GFF DataFrame.</em></p>
+<div id="cell-21" class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>test_fail(</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    insert_gap,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    contains<span class="op">=</span><span class="st">"The two loci are not consecutive;"</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    args<span class="op">=</span>(hox,),</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    kwargs<span class="op">=</span>{<span class="st">"locus1"</span>: <span class="st">"PB.8615"</span>, <span class="st">"locus2"</span>: <span class="st">"g9720"</span>, <span class="st">"identifier"</span>: <span class="st">"gene_id"</span>},</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-22" class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>hox <span class="op">=</span> insert_gap(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    hox,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    locus1<span class="op">=</span><span class="st">"PB.8615"</span>,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    locus2<span class="op">=</span><span class="st">"g9718"</span>,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    identifier<span class="op">=</span><span class="st">"gene_id"</span>,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    no_gaps<span class="op">=</span><span class="dv">4</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    purge_columns<span class="op">=</span>[<span class="st">"gene_name"</span>],</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-23" class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>hox[<span class="st">"strand"</span>] <span class="op">=</span> <span class="st">"-"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-24" class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>hox</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">seqid</th>
+<th data-quarto-table-cell-role="th">gene_name</th>
+<th data-quarto-table-cell-role="th">gene_id</th>
+<th data-quarto-table-cell-role="th">start</th>
+<th data-quarto-table-cell-role="th">end</th>
+<th data-quarto-table-cell-role="th">strand</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>pseudochrom_56</td>
+<td>Hox1-A</td>
+<td>PB.8615</td>
+<td>1927066</td>
+<td>1936157</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>pseudochrom_56</td>
+<td></td>
+<td>gap_PB.8615-0</td>
+<td>1936158</td>
+<td>1936159</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>pseudochrom_56</td>
+<td></td>
+<td>gap_PB.8615-1</td>
+<td>1936160</td>
+<td>1936161</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>pseudochrom_56</td>
+<td></td>
+<td>gap_PB.8615-2</td>
+<td>1936162</td>
+<td>1936163</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>pseudochrom_56</td>
+<td></td>
+<td>gap_PB.8615-3</td>
+<td>1936164</td>
+<td>1936165</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>pseudochrom_56</td>
+<td>Hox2-A</td>
+<td>g9718</td>
+<td>1998922</td>
+<td>2024148</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>pseudochrom_56</td>
+<td>Hox3-A</td>
+<td>PB.8616</td>
+<td>2058396</td>
+<td>2065953</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>pseudochrom_56</td>
+<td>Hox4-A</td>
+<td>g9720</td>
+<td>2195412</td>
+<td>2206712</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>pseudochrom_56</td>
+<td>Hox5-A</td>
+<td>g9721</td>
+<td>2351936</td>
+<td>2354374</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>pseudochrom_56</td>
+<td>Hox6-A</td>
+<td>PB.8617</td>
+<td>2373415</td>
+<td>2375678</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10</td>
+<td>pseudochrom_56</td>
+<td>Hox7-A</td>
+<td>g9723</td>
+<td>2565196</td>
+<td>2594468</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">11</td>
+<td>pseudochrom_56</td>
+<td>Hox8-A</td>
+<td>g9724</td>
+<td>2916314</td>
+<td>2926445</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">12</td>
+<td>pseudochrom_56</td>
+<td>Hox10-A</td>
+<td>g9725</td>
+<td>2986021</td>
+<td>2996225</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="cell-25" class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>hox <span class="op">=</span> insert_gap(hox, locus2<span class="op">=</span><span class="st">"PB.8615"</span>, no_gaps<span class="op">=</span><span class="dv">1</span>, purge_columns<span class="op">=</span>[<span class="st">"gene_name"</span>])</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>hox <span class="op">=</span> insert_gap(hox, locus1<span class="op">=</span><span class="st">"g9725"</span>, no_gaps<span class="op">=</span><span class="dv">1</span>, purge_columns<span class="op">=</span>[<span class="st">"gene_name"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<p><a href="https://github.com/galicae/geneorder/blob/main/geneorder/util.py#L221" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="flip" class="level3">
+<h3 class="anchored" data-anchor-id="flip">flip</h3>
+<blockquote class="blockquote">
+<pre><code> flip (gff)</code></pre>
+</blockquote>
+<div id="cell-27" class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>flip(hox)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">seqid</th>
+<th data-quarto-table-cell-role="th">source</th>
+<th data-quarto-table-cell-role="th">type</th>
+<th data-quarto-table-cell-role="th">start</th>
+<th data-quarto-table-cell-role="th">end</th>
+<th data-quarto-table-cell-role="th">score</th>
+<th data-quarto-table-cell-role="th">strand</th>
+<th data-quarto-table-cell-role="th">phase</th>
+<th data-quarto-table-cell-role="th">attributes</th>
+<th data-quarto-table-cell-role="th">gene_id</th>
+<th data-quarto-table-cell-role="th">gene_name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>pseudochrom_56</td>
+<td>PacBio</td>
+<td>gene</td>
+<td>-1927066</td>
+<td>-1936157</td>
+<td>.</td>
+<td>+</td>
+<td>.</td>
+<td>ID=PB.8615;function=Homeobox domain;gene=Hox1-...</td>
+<td>PB.8615</td>
+<td>Hox1-A</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>pseudochrom_56</td>
+<td>AUGUSTUS</td>
+<td>gene</td>
+<td>-1998922</td>
+<td>-2024148</td>
+<td>.</td>
+<td>+</td>
+<td>.</td>
+<td>ID=g9718;function=sequence-specific DNA bindin...</td>
+<td>g9718</td>
+<td>Hox2-A</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>pseudochrom_56</td>
+<td>PacBio</td>
+<td>gene</td>
+<td>-2058396</td>
+<td>-2065953</td>
+<td>.</td>
+<td>+</td>
+<td>.</td>
+<td>ID=PB.8616;function=homeobox protein;gene=Hox3...</td>
+<td>PB.8616</td>
+<td>Hox3-A</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>pseudochrom_56</td>
+<td>AUGUSTUS</td>
+<td>gene</td>
+<td>-2195412</td>
+<td>-2206712</td>
+<td>.</td>
+<td>+</td>
+<td>.</td>
+<td>ID=g9720;function=sequence-specific DNA bindin...</td>
+<td>g9720</td>
+<td>Hox4-A</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>pseudochrom_56</td>
+<td>AUGUSTUS</td>
+<td>gene</td>
+<td>-2351936</td>
+<td>-2354374</td>
+<td>.</td>
+<td>+</td>
+<td>.</td>
+<td>ID=g9721;function=sequence-specific DNA bindin...</td>
+<td>g9721</td>
+<td>Hox5-A</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>pseudochrom_56</td>
+<td>PacBio</td>
+<td>gene</td>
+<td>-2373415</td>
+<td>-2375678</td>
+<td>.</td>
+<td>+</td>
+<td>.</td>
+<td>ID=PB.8617;function=sequence-specific DNA bind...</td>
+<td>PB.8617</td>
+<td>Hox6-A</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>pseudochrom_56</td>
+<td>AUGUSTUS</td>
+<td>gene</td>
+<td>-2565196</td>
+<td>-2594468</td>
+<td>.</td>
+<td>+</td>
+<td>.</td>
+<td>ID=g9723;function=sequence-specific DNA bindin...</td>
+<td>g9723</td>
+<td>Hox7-A</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>pseudochrom_56</td>
+<td>AUGUSTUS</td>
+<td>gene</td>
+<td>-2916314</td>
+<td>-2926445</td>
+<td>.</td>
+<td>+</td>
+<td>.</td>
+<td>ID=g9724;function=sequence-specific DNA bindin...</td>
+<td>g9724</td>
+<td>Hox8-A</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>pseudochrom_56</td>
+<td>AUGUSTUS</td>
+<td>gene</td>
+<td>-2986021</td>
+<td>-2996225</td>
+<td>.</td>
+<td>+</td>
+<td>.</td>
+<td>ID=g9725;function=sequence-specific DNA bindin...</td>
+<td>g9725</td>
+<td>Hox10-A</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/galicae/geneorder/blob/main/geneorder/util.py#L229" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="insert_break" class="level3">
+<h3 class="anchored" data-anchor-id="insert_break">insert_break</h3>
+<blockquote class="blockquote">
+<pre><code> insert_break (gff:pandas.core.frame.DataFrame, locus1=None, locus2=None,
+               identifier='gene_id')</code></pre>
+</blockquote>
+<p><em>This function inserts a molecule break between two loci (lines) in the GFF DataFrame.</em></p>
+<div id="cell-29" class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>keep <span class="op">=</span> gff[<span class="st">"gene_id"</span>].isin(hox_genes)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>hox <span class="op">=</span> gff[keep].reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>decorate(hox)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>on_scaff44 <span class="op">=</span> gff[<span class="st">"seqid"</span>] <span class="op">==</span> <span class="st">"scaffold_44"</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>is_gene <span class="op">=</span> gff[<span class="st">"type"</span>] <span class="op">==</span> <span class="st">"gene"</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>hoxc <span class="op">=</span> gff[is_gene <span class="op">&amp;</span> on_scaff44].reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>decorate(hoxc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-30" class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>interrupted <span class="op">=</span> pd.concat((hox.loc[<span class="dv">6</span>:], hoxc)).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-31" class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>interrupted</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">seqid</th>
+<th data-quarto-table-cell-role="th">source</th>
+<th data-quarto-table-cell-role="th">type</th>
+<th data-quarto-table-cell-role="th">start</th>
+<th data-quarto-table-cell-role="th">end</th>
+<th data-quarto-table-cell-role="th">score</th>
+<th data-quarto-table-cell-role="th">strand</th>
+<th data-quarto-table-cell-role="th">phase</th>
+<th data-quarto-table-cell-role="th">attributes</th>
+<th data-quarto-table-cell-role="th">gene_id</th>
+<th data-quarto-table-cell-role="th">gene_name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>pseudochrom_56</td>
+<td>AUGUSTUS</td>
+<td>gene</td>
+<td>2565196</td>
+<td>2594468</td>
+<td>.</td>
+<td>-</td>
+<td>.</td>
+<td>ID=g9723;function=sequence-specific DNA bindin...</td>
+<td>g9723</td>
+<td>Hox7-A</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>pseudochrom_56</td>
+<td>AUGUSTUS</td>
+<td>gene</td>
+<td>2916314</td>
+<td>2926445</td>
+<td>.</td>
+<td>-</td>
+<td>.</td>
+<td>ID=g9724;function=sequence-specific DNA bindin...</td>
+<td>g9724</td>
+<td>Hox8-A</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>pseudochrom_56</td>
+<td>AUGUSTUS</td>
+<td>gene</td>
+<td>2986021</td>
+<td>2996225</td>
+<td>.</td>
+<td>-</td>
+<td>.</td>
+<td>ID=g9725;function=sequence-specific DNA bindin...</td>
+<td>g9725</td>
+<td>Hox10-A</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>scaffold_44</td>
+<td>PacBio</td>
+<td>gene</td>
+<td>1927066</td>
+<td>1936157</td>
+<td>.</td>
+<td>-</td>
+<td>.</td>
+<td>ID=PB.1762;function=Homeobox domain;gene=Hox11...</td>
+<td>PB.1762</td>
+<td>Hox11</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>scaffold_44</td>
+<td>AUGUSTUS</td>
+<td>gene</td>
+<td>1998922</td>
+<td>2024148</td>
+<td>.</td>
+<td>-</td>
+<td>.</td>
+<td>ID=g13061;function=sequence-specific DNA bindi...</td>
+<td>g13061</td>
+<td>Hox12</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="cell-32" class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>interrupted <span class="op">=</span> insert_break(interrupted, locus1<span class="op">=</span><span class="st">"g9725"</span>, locus2<span class="op">=</span><span class="st">"PB.1762"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-33" class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>interrupted</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">seqid</th>
+<th data-quarto-table-cell-role="th">source</th>
+<th data-quarto-table-cell-role="th">type</th>
+<th data-quarto-table-cell-role="th">start</th>
+<th data-quarto-table-cell-role="th">end</th>
+<th data-quarto-table-cell-role="th">score</th>
+<th data-quarto-table-cell-role="th">strand</th>
+<th data-quarto-table-cell-role="th">phase</th>
+<th data-quarto-table-cell-role="th">attributes</th>
+<th data-quarto-table-cell-role="th">gene_id</th>
+<th data-quarto-table-cell-role="th">gene_name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>pseudochrom_56</td>
+<td>AUGUSTUS</td>
+<td>gene</td>
+<td>2565196</td>
+<td>2594468</td>
+<td>.</td>
+<td>-</td>
+<td>.</td>
+<td>ID=g9723;function=sequence-specific DNA bindin...</td>
+<td>g9723</td>
+<td>Hox7-A</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>pseudochrom_56</td>
+<td>AUGUSTUS</td>
+<td>gene</td>
+<td>2916314</td>
+<td>2926445</td>
+<td>.</td>
+<td>-</td>
+<td>.</td>
+<td>ID=g9724;function=sequence-specific DNA bindin...</td>
+<td>g9724</td>
+<td>Hox8-A</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>pseudochrom_56</td>
+<td>AUGUSTUS</td>
+<td>gene</td>
+<td>2986021</td>
+<td>2996225</td>
+<td>.</td>
+<td>-</td>
+<td>.</td>
+<td>ID=g9725;function=sequence-specific DNA bindin...</td>
+<td>g9725</td>
+<td>Hox10-A</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>break</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>scaffold_44</td>
+<td>PacBio</td>
+<td>gene</td>
+<td>1927066</td>
+<td>1936157</td>
+<td>.</td>
+<td>-</td>
+<td>.</td>
+<td>ID=PB.1762;function=Homeobox domain;gene=Hox11...</td>
+<td>PB.1762</td>
+<td>Hox11</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>scaffold_44</td>
+<td>AUGUSTUS</td>
+<td>gene</td>
+<td>1998922</td>
+<td>2024148</td>
+<td>.</td>
+<td>-</td>
+<td>.</td>
+<td>ID=g13061;function=sequence-specific DNA bindi...</td>
+<td>g13061</td>
+<td>Hox12</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/galicae\.github\.io\/geneorder");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/galicae/geneorder/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
