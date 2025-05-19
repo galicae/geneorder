@@ -2,6 +2,11 @@
 
 <!-- do not remove -->
 
+## 0.0.5
+
+* Added option to control edge color in schematic synteny plot
+
+
 ## 0.0.4
 
 * Schematic synteny plot can now deal with multiple molecules.

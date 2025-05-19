@@ -216,6 +216,10 @@ def plot_synteny_schematic(
             arrow_from = start
             arrow_to = end - start - head_length
 
+        ec = "black"
+        if "edge_color" in gene.index:
+            ec = gene["edge_color"]
+
         arrow = mpatches.FancyArrow(
             arrow_from,
             0,
@@ -224,12 +228,31 @@ def plot_synteny_schematic(
             width=gene_width,
             head_length=head_length,
             head_width=head_width,
-            ec="black",
+            ec=ec,
             fc=color,
             lw=chromosome_width,
             zorder=2,
             head_starts_at_zero=False,
         )
+
+        if gene["strand"] == ".":
+            arrow_from = end
+            arrow_to = start - end
+            arrow = mpatches.FancyArrow(
+                arrow_from,
+                0,
+                arrow_to,
+                0,
+                width=gene_width,
+                head_length=0,
+                head_width=0,
+                ec=ec,
+                fc=color,
+                lw=chromosome_width,
+                zorder=2,
+                head_starts_at_zero=True,
+            )
+
         ax.add_patch(arrow)
         # ax.arrow(end, 0, start-end-100, 0, head_width=0.05, head_length=100, fc=color, ec=color, linewidth=gene_width)
         ax.text(
